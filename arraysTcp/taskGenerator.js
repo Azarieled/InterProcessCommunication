@@ -12,8 +12,8 @@ socket.connect({
 }, () => {
   socket.write(JSON.stringify(task));
   socket.on('data', data => {
-    let result = JSON.parse(data);
-    console.log(result);
+    let message = JSON.parse(data);
+    console.log(message);
     socket.destroy(); // kill client after server's response
   });
 });

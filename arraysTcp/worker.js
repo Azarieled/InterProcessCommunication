@@ -1,18 +1,15 @@
 'use strict';
-
-module.exports = function() {
+module.exports = () => {
 
   console.log('Hello from worker ' + process.pid + ' ' + api.cluster.worker.id);
 
-  process.on('message', function (message) {
+  process.on('message', msg => {
     console.log(
       'message to worker ' + process.pid +
-      ' from master: ' + JSON.stringify(message)
+      ' from master: ' + JSON.stringify(msg)
     );
     process.send({
-      result: message.task.map(function(item) {
-        return item * 2;
-      })
+      result: msg.task.map(e => e * 2)
     });
   });
 
