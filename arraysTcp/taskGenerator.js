@@ -1,4 +1,5 @@
 'use strict';
+
 const api = {};
 global.api = api;
 api.net = require('net');
@@ -8,13 +9,19 @@ var socket = new api.net.Socket();
 
 socket.connect({
   port: 8282,
-  host: '127.0.0.1',
+  host: '::1',
 }, () => {
-  socket.write(JSON.stringify(task));
+  console.log('Sending task: ' + task);
+  socket.write(JSON.stringify({newTask: task}));
+
   socket.on('data', data => {
     let message = JSON.parse(data);
-    console.log(message);
-    socket.destroy(); // kill client after server's response
+    console.log('Result: ' + message);
+    socket.end(); // kill client after server's response
+  });
+
+  socket.on('close', function() {
+    console.log('Connection closed');
   });
 });
 
